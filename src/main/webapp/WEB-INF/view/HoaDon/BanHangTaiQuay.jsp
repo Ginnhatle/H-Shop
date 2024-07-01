@@ -44,15 +44,15 @@
             </li>
             <li>
                 <i class="fa-solid fa-money-bill"></i>
-                <a href="#">Bán hàng tại quầy</a>
+                <a href="/hoa-don/create">Bán hàng tại quầy</a>
             </li>
             <li>
                 <img src="/img/order.png" alt="">
-                <a href="/hoa-don/index">Quản lý đơn hàng</a>
+                <a href="/hoa-don/index">Quản lí đơn hàng</a>
             </li>
             <li>
                 <img src="/img/icon_ao.jpg" alt="">
-                <a href="#">Quản lý sản phẩm</a>
+                <a href="#">Quản lí sản phẩm</a>
             </li>
             <li>
                 <i class="fa-solid fa-retweet"></i>
@@ -85,7 +85,7 @@
             <div class="filter mt-3">
                 <div class="d-flex justify-content-between line-bottom">
                     <h3 style=" padding-bottom: 15px;">Danh sách sản phẩm</h3>
-                    <a style="cursor: pointer;"><div data-toggle="modal" data-toggle="modal" data-target="#myModal" class="function">Thêm sản phẩm</div></a>
+                    <a style="cursor: pointer;"><div data-toggle="modal" data-target="#myModal" class="function">Thêm sản phẩm</div></a>
 
                     <!-- Modal -->
                     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -139,7 +139,7 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                                 </div>
                             </div>
                         </div>
@@ -161,7 +161,7 @@
                             </div>
                             <div class="col-3">
                                 <div class="quantity" style="display: block !important;">
-                                    <input type="number" onblur="updateQuanlity(${sanPham.ID}, ${sanPham.giaBan}, ${sanPham.soLuong})" id = "${sanPham.ID}" style="width: 125px; margin-right: 210px" class="input-box" value="1" min="1">
+                                    <input type="number" onblur="updateQuantity(${sanPham.ID}, ${sanPham.giaBan}, ${sanPham.soLuong})" id = "${sanPham.ID}" style="width: 125px; margin-right: 210px" class="input-box" value="1" min="1">
                                     <span style="color: red; margin-left: 5px" id="message-${sanPham.ID}"></span>
                                 </div>
                             </div>
@@ -176,7 +176,7 @@
                 <div class="d-flex justify-content-between line-bottom">
                     <h3 style=" padding-bottom: 15px;">Thông tin khách hàng</h3>
                 </div>
-                <form:form action="create" id="myForm" method="post" enctype="multipart/form-data" modelAttribute="createDonHangRequest">
+                <form:form action="create" id="myForm" method="post" modelAttribute="createDonHangRequest">
                     <div class="row d-flex justify-content-between">
                         <div class="col-6">
                             <div class="mb-3">
@@ -264,24 +264,23 @@
     getListSelected()
     setValueInput()
     function handleButtonDelete(s) {
-        console.log(localStorage.getItem('id'));
         if( ! confirm("Bạn có muốn xóa sản phẩm này?") ){
             event.preventDefault();
         } else {
-            var storedArray = localStorage.getItem('quanlity');
+            var storedArray = localStorage.getItem('quantity');
             var newObject = {};
             newObject = JSON.parse(storedArray);
             if (newObject.hasOwnProperty(s)) {
                 delete newObject[s];
             }
-            localStorage.setItem('quanlity', JSON.stringify(newObject));
+            localStorage.setItem('quantity', JSON.stringify(newObject));
             setValueInput();
             location.reload();
         }
     }
 
     function handleSelect(s) {
-        var storedArray = localStorage.getItem('quanlity');
+        var storedArray = localStorage.getItem('quantity');
         var newObject = {};
         if (!storedArray) newObject[s] = 1;
         else {
@@ -289,7 +288,7 @@
             if (!newObject.hasOwnProperty(s)) newObject[s] = 1;
         }
 
-        localStorage.setItem('quanlity', JSON.stringify(newObject));
+        localStorage.setItem('quantity', JSON.stringify(newObject));
         setValueInput()
         location.reload();
     }
@@ -303,12 +302,12 @@
         returnInput.value = isNaN(returnInput.value) ? 0 : change;
     });
 
-    function updateQuanlity(n, price, amount) {
-        var idObject = JSON.parse(localStorage.getItem('quanlity'));
+    function updateQuantity(n, price, amount) {
+        var idObject = JSON.parse(localStorage.getItem('quantity'));
         idObject[n] = document.getElementById(n).value;
         if(document.getElementById(n).value < amount){
             document.getElementById('message-' + n).innerHTML = ''
-            localStorage.setItem('quanlity', JSON.stringify(idObject));
+            localStorage.setItem('quantity', JSON.stringify(idObject));
             document.querySelector(".price-" + n).innerHTML = document.getElementById(n).value * price + " VNĐ";
             document.querySelector(".sl-" + n).innerHTML = 'Số lượng: '+document.getElementById(n).value
             updateTotalPrice()
@@ -316,17 +315,16 @@
         }else{
             document.getElementById('message-' + n).innerHTML = 'Không đủ hàng!'
         }
-
     }
 
     function setValueInput(){
-        var idValue = localStorage.getItem('quanlity');
+        var idValue = localStorage.getItem('quantity');
         var inputElement = document.getElementById('list_product');
         inputElement.value = idValue;
     }
 
     function getListSelected(){
-        var listItemSelected = JSON.parse(localStorage.getItem('quanlity')) ?? {};
+        var listItemSelected = JSON.parse(localStorage.getItem('quantity')) ?? {};
 
         <c:forEach var="sanPham" items="${sanPhams}">
         if (listItemSelected.hasOwnProperty(${sanPham.ID})){
@@ -334,9 +332,10 @@
         }
         </c:forEach>
     }
+
     function updateTotalPrice() {
         totalPrice = 0
-        var listItemSelected = JSON.parse(localStorage.getItem('quanlity')) ?? {};
+        var listItemSelected = JSON.parse(localStorage.getItem('quantity')) ?? {};
         <c:forEach var="sanPham" items="${sanPhams}">
         if (listItemSelected.hasOwnProperty(${sanPham.ID})) {
             var s =  (document.querySelector('.price-${sanPham.ID}').innerText).trim()
@@ -349,39 +348,31 @@
         document.getElementById('prices').innerHTML = totalPrice + " VNĐ"
     }
 
-    <%-- function checkDiscount(e) {--%>
-    <%--    var percent = 0;--%>
-    <%--    <c:forEach var="giamGia" items="${giamGias}">--%>
-    <%--    if (e.value === "${giamGia.tenGiamGia}"){--%>
-    <%--        percent = ${giamGia.giaTriGiamGia}--%>
-    <%--    }--%>
-    <%--    </c:forEach>--%>
-    <%--    if(percent === 0){--%>
-    <%--        document.getElementById('discount-message').innerHTML = 'Không hợp lệ'--%>
-    <%--        document.getElementById('discount-percent').value = ''--%>
-    <%--        document.getElementById('prices').innerHTML = localStorage.getItem('price_items') + " VNĐ"--%>
-    <%--        document.getElementById('money-discount').innerHTML = 0 + " VNĐ"--%>
-
-    <%--    }--%>
-    <%--    else{--%>
-    <%--        document.getElementById('discount-message').innerHTML = ''--%>
-    <%--        document.getElementById('discount-percent').value = percent--%>
-    <%--        document.getElementById('prices').innerHTML = localStorage.getItem('price_items') * (1-percent/100) + " VNĐ"--%>
-    <%--        document.getElementById('money-discount').innerHTML = localStorage.getItem('price_items') * (percent/100) + " VNĐ"--%>
-    <%--        localStorage.setItem('price_items', JSON.stringify(localStorage.getItem('price_items') * (1-percent/100)))--%>
-    <%--    }--%>
-    <%--}--%>
 </script>
 
 <script>
     var btnSubmit = document.getElementById('btn-submit');
     var form = document.getElementById('myForm');
     btnSubmit.addEventListener('click', function(event) {
-        if (!form.checkValidity()) {
+        var returnInput = document.getElementById('return');
+        var tienTra = parseInt(returnInput.value);
+        var listItemSelected = JSON.parse(localStorage.getItem('quantity')) ?? {};
+        if (!confirm("Bạn có chắc chắn muốn xác nhận đơn hàng?")) {
+            event.preventDefault();
+        }
+        else if (Object.keys(listItemSelected).length === 0) {
+            event.preventDefault();
+            alert("Giỏ hàng không có sản phẩm. Vui lòng thêm sản phẩm vào giỏ hàng trước khi xác nhận đơn hàng!");
+        }
+        else if (tienTra < 0) {
+            event.preventDefault();
+            alert("Tiền dư không được âm. Vui lòng kiểm tra lại!");
+        } else if (!form.checkValidity()) {
             event.preventDefault();
             alert("Vui lòng điền đầy đủ thông tin!");
         }else{
             localStorage.clear();
+            alert("Xác nhận đơn hàng thành công!");
             event.target.form.submit();
         }
 

@@ -44,15 +44,15 @@
             </li>
             <li>
                 <i class="fa-solid fa-money-bill"></i>
-                <a href="#">Bán hàng tại quầy</a>
+                <a href="/hoa-don/create">Bán hàng tại quầy</a>
             </li>
             <li>
                 <img src="/img/order.png" alt="">
-                <a href="/hoa-don/index" >Quản lý đơn hàng</a>
+                <a href="/hoa-don/index" >Quản lí đơn hàng</a>
             </li>
             <li>
                 <img src="/img/icon_ao.jpg" alt="">
-                <a href="#">Quản lý sản phẩm</a>
+                <a href="#">Quản lí sản phẩm</a>
             </li>
             <li>
                 <i class="fa-solid fa-retweet"></i>
@@ -82,13 +82,15 @@
 
         <!-- content -->
         <div style="width: 100%; background-color: #eee; padding: 20px;">
-            <h3>Quản lý đơn hàng / Mã đơn ${detail.id}</h3>
+            <h3>Quản lý đơn hàng / Mã đơn ${detail.maHoaDon}</h3>
             <section class="mt-5">
                 <h3 style="margin-top: -30px; padding-bottom: 15px;" class="line-bottom">Trạng thái đơn hàng</h3>
                 <div class="text">
-                    <c:forEach var="trangThai" items="${detail.trangThaiDonList}">
+                    <%--                    <c:forEach var="trangThai" items="${detail.trangThaiDonList}">--%>
+                    <c:forEach var="trangThai" items="${detail.timeLineDTOList}">
                         <div class="one">
-                            <h4>${trangThai.tenTrangThai}</h4>
+                            <h4>${trangThai.trangThaiDon.tenTrangThai}</h4>
+                            <p>${trangThai.time}</p>
                         </div>
                     </c:forEach>
                 </div>
@@ -101,8 +103,8 @@
                     <c:choose>
                         <c:when test="${1 < 2}">
                             <div class="d-flex justify-content-between gap-4">
-                                <a style="color: #ffa500 !important;" href="/hoa-don/donHangUP/${detail.id}" id="confirmBtn" class="function" >Chuyển sang trạng thái kế tiếp</a>
-                                <a style="color: #fff !important;" href="/hoa-don/donHangHuy/${detail.id}" id="cancelBtn" class="function cancel" >Hủy Đơn</a>
+                                <a style="color: #ffa500 !important;" href="/hoa-don/donHangUP/${detail.id}" id="confirmBtn" class="function" onclick="return confirmChuyenTT();">Chuyển sang trạng thái kế tiếp</a>
+                                <a style="color: #fff !important;" href="/hoa-don/donHangHuy/${detail.id}" id="cancelBtn" class="function cancel" onclick="return confirmHuyDon();">Hủy Đơn</a>
                             </div>
                             <br />
                         </c:when>
@@ -116,24 +118,28 @@
                 </div>
             </div>
             <div class="filter mt-5">
-                <h3 style=" padding-bottom: 15px;" class="line-bottom">Thông tin đơn hàng / Đơn tại quầy</h3>
+                <h3 style=" padding-bottom: 15px;" class="line-bottom">Thông tin đơn hàng</h3>
                 <div class="w-100">
                     <div class="mt-4 d-flex justify-content-between w-100 gap-4">
-                        <div ><b>Mã hóa đơn:</b> ${detail.id}</div>
+                        <div ><b>Mã hóa đơn:</b> ${detail.maHoaDon}</div>
                         <div ><b>Tên khách hàng:</b> ${detail.tenKH}</div>
-                        <div ><b>Trạng thái: </b> ${detail.trangThai}</div>
+                        <div ><b>Ngày tạo hóa đơn:</b> ${detail.ngayTao}</div>
+
                     </div>
                     <div class="mt-4 d-flex justify-content-between w-100 gap-4">
                         <div ><b>SĐT nguười nhận:</b> ${detail.sdt}</div>
-                        <div ><b>Loại đơn hàng:</b> Tại quầy</div>
                         <div ><b>Tên người nhận:</b> ${detail.tenKH}</div>
+                        <div ><b>Hình thức thanh toán:</b> ${detail.hinhThucThanhToan}</div>
+                    </div>
+                    <div class="mt-4 d-flex justify-content-between w-100 gap-4">
+                        <div ><b>Nhân viên tiếp nhận:</b> ${detail.nhanVien}</div>
+                        <div ><b>Loại đơn hàng:</b> ${detail.loaiHoaDon ? 'Tại quầy':'Trực tuyến'}</div>
+                        <div ><b>Trạng thái: </b> ${detail.trangThai}</div>
                     </div>
                 </div>
             </div>
 
 
-
-            
 
             <div class="filter mt-5">
                 <div class="d-flex justify-content-between line-bottom">
@@ -208,7 +214,7 @@
                             </div>
                             <div class="col-3">
                                 <div>${hoaDon.sanPhamChiTiet.sanPham.tenSanPham}</div>
-                                <div style="color: red;">${hoaDon.donGia} đ</div>
+                                <div style="color: red;">${hoaDon.donGia} VNĐ</div>
                                 <div>Size: ${hoaDon.sanPhamChiTiet.kichCo.tenKichCo}</div>
                                 <div class="sl-${hoaDon.sanPhamChiTiet.ID}">Số lượng: ${hoaDon.soLuong}</div>
                             </div>
@@ -223,43 +229,9 @@
                         </div>
                     </c:forEach>
                 </div>
-                <div class="w-100">
-                    <c:forEach var="sanPham" items="${sanPhams}">
-                        <div id="item-${sanPham.ID}" class="row d-flex align-items-center line-bottom d-none">
-                            <div class="col-3 d-flex">
-                                <img style="width: 60px; height: 60px; margin: auto;" src="${sanPham.anh.anh}}" alt="">
-                            </div>
-                            <div class="col-3">
-                                <div>${sanPham.sanPham.tenSanPham}</div>
-                                <div style="color: red;">${sanPham.giaBan} đ</div>
-                                <div>Size ${sanPham.kichCo.tenKichCo}</div>
-                                <div class="sl-${sanPham.ID}">Số lượng: 1</div>
-                            </div>
-                            <div class="col-3">
-                                <div class="quantity" style="display: block !important;">
-                                    <input type="number" onblur="updateQuantity(${sanPham.ID}, ${sanPham.giaBan}, ${sanPham.soLuong})" id = "${sanPham.ID}" style="width: 100px; margin-right: 210px" class="input-box" value="1" min="1">
-                                    <span style="color: red; margin-left: 5px" id="message-${sanPham.ID}"></span>
-                                </div>
-                            </div>
-                            <div class="col-2 price-${sanPham.ID}" style="font-weight: 700; color: red;"> ${sanPham.giaBan} VNĐ</div>
-                        </div>
-                    </c:forEach>
-                </div>
-                <form:form action="/hoa-don/donHang/${detail.id}" modelAttribute="updateDonHangRequest" method="post" enctype="multipart/form-data">
-                    <c:choose>
-                        <c:when test="${detail.trangThaiDon.ID < 3}">
-                            <button id="btn-submit" style="background-color: #ffa500; float: right; width: 80px" type="submit" class="btn btn-primary d-none">Lưu</button>
-                            <input type="text" name="list_product" value="" class="form-control d-none" id="list_product">
-                            <br />
-                        </c:when>
-                        <c:otherwise>
-                            <!--<button id="btn-submit" style="background-color: #ffa500; float: right; width: 80px" type="submit" class="btn btn-primary d-none">Lưu</button>-->
-                            <input type="text" name="list_product" value="" class="form-control d-none" id="list_product" readonly>
-                            <br />
-                        </c:otherwise>
-                    </c:choose>
-                </form:form>
+
             </div>
+
             <div class="filter mt-5">
                 <div class="row d-flex justify-content-between">
                     <div class="col-3">
@@ -269,7 +241,7 @@
                         </div>
                         <div class="d-flex justify-content-between">
                             <div>Giảm giá từ cửa hàng</div>
-                            <b>${detail.giaTriGiamGia}</b>
+                            <b>${detail.giaTriGiamGia}%</b>
                         </div>
                     </div>
 
@@ -280,7 +252,7 @@
                         </div>
                         <div class="d-flex justify-content-between">
                             <div>Giảm giá</div>
-                        <%--<b id="money-discount">${detail.giamGia} VNĐ</b>--%>
+                            <%--<b id="money-discount">${detail.giamGia} VNĐ</b>--%>
                             <b id="money-discount">0 VNĐ</b>
                         </div>
                         <div class="d-flex justify-content-between">
@@ -296,6 +268,36 @@
                     </div>
                 </div>
             </div>
+
+
+
+            <div class="filter mt-5">
+                <h3 style=" padding-bottom: 15px;" class="line-bottom">Lịch sử đơn hàng</h3>
+                <div class="w-100">
+                    <table id="" class="table p-5" style="width:100%">
+                        <thead>
+                        <tr>
+                            <th>Thời gian</th>
+                            <th>Người cập nhật</th>
+                            <th>Trạng thái hóa đơn</th>
+                            <th>Ghi chú</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach var="thanhToan" items="${detail.lichSuThanhToanList}">
+                            <tr>
+                                <td>${thanhToan.ngayTao}</td>
+                                <td>${thanhToan.nguoiCapNhat}</td>
+                                <td>${thanhToan.nhungThayDoi}</td>
+                                <td>${thanhToan.ghiChu}</td>
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
 
         </div>
 
@@ -318,86 +320,13 @@
         searching: true
     });
 
-    function handleButtonClick(s) {
-        if(!confirm("Xác nhận thay đổi trạng thái?") ){
-            event.preventDefault();
-        } else {
-            window.location.href = s
-        }
-    }
-</script>
-
-<script>
-    getListProductSelected()
-    updateTotalPrice()
-    setValueInput()
-    function getListProductSelected(){
-        const newObject = JSON.parse(localStorage.getItem('quantity')) ?? {};
-        <c:forEach var="hoaDon" items="${detail.hoaDonChiTietList}">
-        newObject[${hoaDon.sanPhamChiTiet.ID}] = ${hoaDon.soLuong};
-        </c:forEach>
-        localStorage.setItem('quantity', JSON.stringify(newObject));
-    }
-
-    window.addEventListener('DOMContentLoaded', function () {
-        var listItemSelected = JSON.parse(localStorage.getItem('selected')) ?? [];
-
-        <c:forEach var="sanPham" items="${sanPhams}">
-        if (listItemSelected.includes(${sanPham.ID})){
-            document.getElementById('item-${sanPham.ID}').classList.remove("d-none")
-        }
-        </c:forEach>
-    });
-
-    function updateQuantity(n, price, amount) {
-        var idObject = JSON.parse(localStorage.getItem('quantity')) ?? {};
-        idObject[n] = document.getElementById(n).value;
-        if(document.getElementById(n).value <= amount){
-            document.getElementById('message-' + n).innerHTML = ''
-            localStorage.setItem('quantity', JSON.stringify(idObject));
-            document.querySelector(".price-" + n).innerHTML = document.getElementById(n).value * price + " VNĐ";
-            document.querySelector(".sl-" + n).innerHTML = 'Số lượng: '+document.getElementById(n).value
-            updateTotalPrice()
-            setValueInput(1)
-        }else{
-            document.getElementById('message-' + n).innerHTML = 'Không đủ hàng!'
-        }
-
-    }
-
-    function handleSelect(s) {
-        var storedArray =  JSON.parse(localStorage.getItem('quantity')) ?? {};
-        const selectedObj = JSON.parse(localStorage.getItem('selected')) ?? [];
-        if (!storedArray.hasOwnProperty(s)) selectedObj.push(s)
-        if (!storedArray.hasOwnProperty(s)) storedArray[s] = 1;
-        localStorage.setItem('selected', JSON.stringify(selectedObj));
-        localStorage.setItem('quantity', JSON.stringify(storedArray));
-        location.reload();
-
-    }
-
-    function updateTotalPrice() {
-        totalPrice = 0
-        var listItemSelected = JSON.parse(localStorage.getItem('quantity')) ?? {};
-        <c:forEach var="sanPham" items="${sanPhams}">
-        if (listItemSelected.hasOwnProperty(${sanPham.ID})) {
-            var s =  document.querySelector('.price-${sanPham.ID}').innerText.trim()
-            var priceValue = s.split(" ")[0];
-            console.log(s)
-            totalPrice += parseInt(priceValue)
-        }
-        </c:forEach>
-        document.getElementById('prices').innerHTML = totalPrice.toFixed(1) + " VNĐ"
-        document.getElementById('money-discount').innerHTML = 0 + " VNĐ"
-        document.getElementById('total-money').innerHTML = (totalPrice*(1) + ${detail.phiVanChuyen}).toFixed(1) + " VNĐ"
-    }
-
-    function setValueInput(check = 0){
-        var idValue = localStorage.getItem('quantity');
-        if(localStorage.getItem('selected') || check === 1) document.getElementById('btn-submit').classList.remove('d-none')
-        var inputElement = document.getElementById('list_product');
-        inputElement.value = idValue;
-    }
+    // function handleButtonClick(s) {
+    //     if(!confirm("Xác nhận thay đổi trạng thái?") ){
+    //         event.preventDefault();
+    //     } else {
+    //         window.location.href = s
+    //     }
+    // }
 </script>
 
 <script>
@@ -407,4 +336,13 @@
         localStorage.clear();
         event.target.form.submit();
     });
+
+    function confirmChuyenTT() {
+        return confirm("Bạn có chắc chắn muốn chuyển trạng thái không?");
+    }
+
+    function confirmHuyDon() {
+        return confirm("Bạn có chắc chắn muốn hủy đơn hàng này không?");
+    }
+
 </script>

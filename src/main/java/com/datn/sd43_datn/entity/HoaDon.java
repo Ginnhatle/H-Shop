@@ -18,6 +18,8 @@ public class HoaDon {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long ID;
+    @Column(name = "ma_hoa_don")
+    private String maHoaDon;
     @Column(name = "ngay_tao")
     private Date ngayTao;
     @Column(name = "ngay_cap_nhat")
@@ -34,6 +36,8 @@ public class HoaDon {
     private Float thanhTien;
     @Column(name = "hinh_thuc_thanh_toan")
     private String hinhThucThanhToan;
+    @Column(name = "loai_hoa_don")
+    private Boolean loaiHoaDon;
     @Column(name = "phi_van_chuyen")
     private Float phiVanChuyen;
     @Column(name = "dia_chi_giao_hang")
@@ -46,9 +50,12 @@ public class HoaDon {
     private String nguoiThanhToan;
     @Column(name = "id_status")
     private String idStatus;
+    @Column(name = "thoi_gian_don_hang")
+    private String thoiGianDonHang;
 
-//    @OneToMany(mappedBy = "hoa_don", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    List<HoaDonChiTietRepository> hoaDonChiTiets = new ArrayList<>();
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_nhan_vien")
+    private NhanVien nhanVien;
 
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_khach_hang")
@@ -61,4 +68,6 @@ public class HoaDon {
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_giam_gia")
     private GiamGia giamGia;
+
+
 }

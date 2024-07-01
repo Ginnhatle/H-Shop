@@ -32,29 +32,27 @@ public class HoaDonController {
 
     @GetMapping("/index")
     public String getDonHang(Model model) {
-        System.out.println(trangThaiDonRepository.findAll());
         model.addAttribute("hoaDons", hoaDonService.getHoaDonRequests());
         model.addAttribute("trangThais",trangThaiDonRepository.findAll());
         return "HoaDon/Hoadon";
     }
     @GetMapping("donHang/{id}")
     public String getHoaDon(Model model, @PathVariable long id) {
-        System.out.println(hoaDonService.getHoaDonDetail(id));
-        UpdateDonHangRequest updateDonHangRequest = new UpdateDonHangRequest();
+//        UpdateDonHangRequest updateDonHangRequest = new UpdateDonHangRequest();
         model.addAttribute("detail",hoaDonService.getHoaDonDetail(id));
         model.addAttribute("sanPhams",sanPhamChiTietService.getSanPhamChiTiet());
-        model.addAttribute("updateDonHangRequest",updateDonHangRequest);
+//        model.addAttribute("updateDonHangRequest",updateDonHangRequest);
         return "HoaDon/ChiTiet";
     }
-    @PostMapping("donHang/{id}")
-    public String updateHoaDon(Model model, @PathVariable long id,@ModelAttribute("updateDonHangRequest") UpdateDonHangRequest updateDonHangRequest) {
-        System.out.println(updateDonHangRequest);
-        hoaDonService.updateHoaDon(updateDonHangRequest,id);
-        model.addAttribute("detail",hoaDonService.getHoaDonDetail(id));
-        model.addAttribute("sanPhams",sanPhamChiTietService.getSanPhamChiTiet());
-        model.addAttribute("updateDonHangRequest",updateDonHangRequest);
-        return "HoaDon/ChiTiet";
-    }
+    //    @PostMapping("donHang/{id}")
+//    public String updateHoaDon(Model model, @PathVariable long id,@ModelAttribute("updateDonHangRequest") UpdateDonHangRequest updateDonHangRequest) {
+//        System.out.println(updateDonHangRequest);
+//        hoaDonService.updateHoaDon(updateDonHangRequest,id);
+//        model.addAttribute("detail",hoaDonService.getHoaDonDetail(id));
+//        model.addAttribute("sanPhams",sanPhamChiTietService.getSanPhamChiTiet());
+//        model.addAttribute("updateDonHangRequest",updateDonHangRequest);
+//        return "HoaDon/ChiTiet";
+//    }
     @GetMapping("donHangUP/{id}")
     public String postHoaDon(@PathVariable long id, Model model) {
         UpdateDonHangRequest updateDonHangRequest = new UpdateDonHangRequest();
@@ -81,15 +79,15 @@ public class HoaDonController {
     }
     @GetMapping("/filter")
     public String filter(Model model,
-                         @RequestParam String search,
+            /*@RequestParam String search,*/
                          @RequestParam String status,
                          @RequestParam String batDau,
                          @RequestParam String ketThuc
     ) throws ParseException {
         System.out.println(batDau + " " + ketThuc);
-        model.addAttribute("hoaDons", hoaDonService.filterHoaDonRequest(search,status,batDau,ketThuc));
+        model.addAttribute("hoaDons", hoaDonService.filterHoaDonRequest(/*search,*/status,batDau,ketThuc));
         model.addAttribute("trangThais",trangThaiDonRepository.findAll());
-        System.out.println(search+status + batDau + ketThuc);
+        System.out.println(/*search+*/status + batDau + ketThuc);
         return "HoaDon/Hoadon";
     }
     @PostMapping("create")

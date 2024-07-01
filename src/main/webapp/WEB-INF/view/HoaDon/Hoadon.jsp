@@ -45,11 +45,11 @@
             </li>
             <li>
                 <img src="/img/order.png" alt="">
-                <a href="/hoa-don/index" data-toggle="collapse" aria-expanded="false">Quản lý đơn hàng</a>
+                <a href="/hoa-don/index" data-toggle="collapse" aria-expanded="false">Quản lí đơn hàng</a>
             </li>
             <li>
                 <img src="/img/icon_ao.jpg" alt="">
-                <a href="#">Quản lý sản phẩm</a>
+                <a href="#">Quản lí sản phẩm</a>
             </li>
             <li>
                 <i class="fa-solid fa-retweet"></i>
@@ -79,14 +79,10 @@
 
         <!-- content -->
         <div style="width: 100%; background-color: #eee; padding: 20px;">
-            <h3>Quản lý đơn hàng</h3>
+            <h3>Quản lí đơn hàng</h3>
             <form action="/hoa-don/filter">
                 <div class="filter">
                     <div class="w-100 first">
-                        <div class="text-container align-items-center">
-                            <svg focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path></svg>
-                            <input type="text" name="search" id="search-input" placeholder="Tìm kiếm hóa đơn">
-                        </div>
                         <div>
                             <select name="status" id="status">
                                 <option value="0">Tất cả đơn hàng</option>
@@ -104,19 +100,9 @@
                     <div class="w-100 second mt-4">
                         <div class="align-items-center w-50 date">
                             <input name="batDau" type="date" placeholder="Từ ngày">
-                            <input name="ketThuc" placeholder="Đến ngày" type="date">
-                        </div>
-                        <div class="type d-flex gap-2 align-items-center" style="font-size: 14px;">
-                            <div style="font-weight: 700; margin-bottom: 4px;">Loại:</div>
-                            <input type="radio" id="html" name="type" value="0">
-                            <label  for="html">Tất cả</label>
-                            <input type="radio" id="css" name="type" value="1">
-                            <label  for="css">Trực tuyến</label>
-                            <input type="radio" id="javascript" name="type" value="2">
-                            <label  for="javascript">Tại quầy</label>
+                            <input name="ketThuc" type="date" placeholder="Đến ngày">
                         </div>
                         <button type="submit" class="function">Tìm kiếm</button>
-
                     </div>
                 </div>
             </form>
@@ -124,24 +110,28 @@
                 <table id="example" class="table table-striped p-5" style="width:100%">
                     <thead>
                     <tr>
+                        <th>#</th>
                         <th>Mã</th>
                         <th>Tổng SP</th>
                         <th>Tổng số tiền</th>
                         <th>Tên khách hàng</th>
                         <th>Ngày tạo</th>
-
+                        <th>Loại hóa đơn</th>
                         <th>Trạng thái</th>
                         <th>Hành động</th>
                     </tr>
                     </thead>
                     <tbody class="index">
-                    <c:forEach var="hoaDon" items="${hoaDons}">
+                    <c:forEach var="hoaDon" items="${hoaDons}" varStatus="status">
                     <tr>
-                        <td>${hoaDon.ID}</td>
+                        <td>${status.index +1}</td>
+                            <%--                        <td>${hoaDon.ID}</td>--%>
+                        <td>${hoaDon.maHoaDon}</td>
                         <td>${hoaDon.tongSp}</td>
                         <td>${hoaDon.tongTien}</td>
                         <td>${hoaDon.tenKH}</td>
                         <td>${hoaDon.ngayTao}</td>
+                        <td>${hoaDon.loaiHoaDon ? 'Tại quầy':'Trực tuyến'}</td>
                         <td>${hoaDon.trangThaiDon}</td>
 
                         <td style="text-align: center;"><a href="donHang/${hoaDon.ID}"><i class="fa-solid fa-pen-to-square" style="color: purple; font-size: 18px;"></i></a></td>
@@ -167,14 +157,15 @@
         });
     });
 
-     new DataTable('#example', {
-         select: false,
-         searching: false,
-         language:{
-             lengthMenu: "_MENU_ đơn hàng mỗi trang",
-             info: "Hiển thị từ _START_ đến _END_ của _TOTAL_ đơn hàng",
-             infoEmpty: "Không có hóa đơn nào",
-         }
-     });
+    new DataTable('#example', {
+        select: false,
+        searching: true,
+        language:{
+            search: "Tìm kiếm theo từ khóa:",
+            lengthMenu: "_MENU_ đơn hàng mỗi trang",
+            info: "Hiển thị từ _START_ đến _END_ của _TOTAL_ đơn hàng",
+            infoEmpty: "Không có hóa đơn nào",
+        }
+    });
 
 </script>

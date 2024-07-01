@@ -20,6 +20,8 @@ public class KhachHang {
     private Long ID;
     @Column(name = "ten_khach_hang")
     private String tenKhachHang;
+    @Column(name = "kieu_khach_hang")
+    private boolean kieuKhachHang;
     @Column(name = "SDT")
     private String sdt;
     @Column(name = "gioi_tinh")

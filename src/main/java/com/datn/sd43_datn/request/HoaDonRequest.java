@@ -11,9 +11,11 @@ import java.util.Date;
 @ToString
 public class HoaDonRequest {
     private Long ID;
+    private String maHoaDon;
     private Long tongSp;
     private Long tongTien;
     private String tenKH;
     private Date ngayTao;
+    private Boolean loaiHoaDon;
     private String trangThaiDon;
 }

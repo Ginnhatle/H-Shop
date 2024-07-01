@@ -1,17 +1,18 @@
 package com.datn.sd43_datn.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.util.Date;
 
 @Entity
-@Table(name = "lich_su_hoa_don")
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Table(name = "lich_su_hoa_don")
 public class LichSuThanhToan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,24 +20,15 @@ public class LichSuThanhToan {
     private Long id;
     @Column(name = "ngay_tao")
     private Date ngayTao;
-    @Column(name = "ngay_cap_nhat")
-    private Date ngayCapNhat;
-    @Column(name = "nguoi_tao")
-    private String nguoiTao;
     @Column(name = "nguoi_cap_nhat")
     private String nguoiCapNhat;
     @Column(name = "nhung_thay_doi")
     private String nhungThayDoi;
-    @Column(name = "so_tien_thanh_toan")
-    private Long soTienThanhToan;
-    @Column(name = "so_tien_con_lai")
-    private Long soTienConLai;
+    @Column(name = "ghi_chu")
+    private String ghiChu;
 
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_hoa_don")
     private HoaDon hoaDon;
 
-    public LichSuThanhToan() {
-
-    }
 }
